@@ -5,7 +5,7 @@ import sys
 
 def subnet_calc():
     while True:
-        ip_address = input("Enter a valid IP address: ")
+        ip_address = input("\nEnter a valid IP address: ")
 
         a = ip_address.split(".")  # Splits the IP address into a list containing octets
         ''' IP address should have 4 octets. Addresses starting from 127 are reserved for 
@@ -29,7 +29,7 @@ def subnet_calc():
 
     # Is it a valid subnet mask?
     while True:
-        subnet_mask = input("\nEnter a subnet mask:")
+        subnet_mask = input("\nEnter a subnet mask: ")
 
         # Check octets
         b = subnet_mask.split(".")
@@ -68,7 +68,7 @@ def subnet_calc():
     hosts_per_subnet = abs(2 ** no_of_zeroes) - 2  # To return positive value if mask is 32 bits
     # print("Number of zeroes: ", no_of_zeroes)
     # print("Number of ones: ", no_of_ones)
-    # print("Number of hosts per subnet: ", hosts_per_subnet)
+
 
     # Wildcard mask
     """A wilcard mask is simply the inverse of the subnet mask"""
@@ -101,7 +101,7 @@ def subnet_calc():
     # print(binary_broadcast_address)
     subnet_ID_octet = []
     for entry in range(0, len(binary_subnet_ID), 8):
-        subnet_octet = binary_subnet_ID[entry:entry + 8]
+        subnet_octet = binary_subnet_ID[entry:entry+8]
         subnet_ID_octet.append(subnet_octet)
     # print(subnet_ID_octet)
 
@@ -110,7 +110,25 @@ def subnet_calc():
         string_subnet_ID.append(str(int(octet, 2)))
 
     final_subnet_ID = ".".join(string_subnet_ID)
-    print("Subnet ID is: ", final_subnet_ID)
+    print("\n\nSubnet ID:", final_subnet_ID)
+
+    broadcast_add_octet = []
+    for entry in range(0, len(binary_broadcast_address), 8):
+        broadcast_octet = binary_broadcast_address[entry:entry+8]
+        broadcast_add_octet.append(broadcast_octet)
+    # print(broadcast_add_octet)
+
+    string_broadcast_add = []
+    for octet in broadcast_add_octet:
+        string_broadcast_add.append(str(int(octet, 2)))
+    # the '2' is used along with int since it is a built-in function
+
+    final_broadcast_add = ".".join(string_broadcast_add)
+    print("Broadcast address:", final_broadcast_add)
+
+    print("Wildcard mask:", wildcard_mask)
+    print("Number of mask bits:", no_of_ones)
+    print("Number of hosts per subnet:", hosts_per_subnet)
 
 
 subnet_calc()
