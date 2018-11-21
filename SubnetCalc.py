@@ -19,6 +19,7 @@ def subnet_calc():
                 and (int(a[0]) != 169 or int(a[1]) != 254) \
                 and (0 <= int(a[1]) <= 255 and 0 <= int(a[2]) <= 255 and 0 <= int(a[3]) <= 255):
             break
+            # or means multiplication. and means addition
 
         else:
             print("\nPlease enter a valid IP address.\n")
@@ -45,9 +46,71 @@ def subnet_calc():
             print("\nPlease enter a valid subnet mask.\n")
             continue
 
+    # Converting subnet mask into binary string format
+    mask_octet_decimal = subnet_mask.split(".")
+    mask_octet_padded = []
+    for entry in range(0, len(mask_octet_decimal)):
+        binary_octet = bin(int(mask_octet_decimal[entry])).split("b")[1]
 
-    # Converting mask into binary format
-    
+        if len(binary_octet) == 8:
+            mask_octet_padded.append(binary_octet)
+
+        elif len(binary_octet) < 8:
+            binary_octet_padded = binary_octet.zfill(8)
+            mask_octet_padded.append(binary_octet_padded)
+
+    decimal_mask = "".join(mask_octet_padded)
+    # print("Decimal subnet mask is: ", decimal_mask)
+
+    # Count host bits in subnet mask and calculate number of hosts per subnet
+    no_of_zeroes = decimal_mask.count("0")
+    no_of_ones = 32 - no_of_zeroes
+    hosts_per_subnet = abs(2 ** no_of_zeroes) - 2  # To return positive value if mask is 32 bits
+    # print("Number of zeroes: ", no_of_zeroes)
+    # print("Number of ones: ", no_of_ones)
+    # print("Number of hosts per subnet: ", hosts_per_subnet)
+
+    # Wildcard mask
+    """A wilcard mask is simply the inverse of the subnet mask"""
+    wildcard_octet = []
+    for entry in mask_octet_decimal:
+        wildcard = 255 - int(entry)
+        wildcard_octet.append(str(wildcard))
+
+    wildcard_mask = ".".join(wildcard_octet)
+
+    # Converting IP address to binary format
+    padded_binary_IP = []
+    for entry in a:
+        binary_IP = bin(int(entry)).split("b")[1]
+
+        if len(binary_IP) == 8:
+            padded_binary_IP.append(binary_IP)
+
+        elif len(binary_IP) < 8:
+            binary_octets = binary_IP.zfill(8)
+            padded_binary_IP.append(binary_octets)
+
+    binary_IP_Address = "".join(padded_binary_IP)
+    # print("Binary IP address: ", binary_IP_Address)
+
+    # Finding Subnet ID and Broadcast Address
+    binary_subnet_ID = binary_IP_Address[:no_of_ones] + "0" * no_of_zeroes
+    binary_broadcast_address = binary_IP_Address[:no_of_ones] + "1" * no_of_zeroes
+    # print(binary_subnet_ID)
+    # print(binary_broadcast_address)
+    subnet_ID_octet = []
+    for entry in range(0, len(binary_subnet_ID), 8):
+        subnet_octet = binary_subnet_ID[entry:entry + 8]
+        subnet_ID_octet.append(subnet_octet)
+    # print(subnet_ID_octet)
+
+    string_subnet_ID = []
+    for octet in subnet_ID_octet:
+        string_subnet_ID.append(str(int(octet, 2)))
+
+    final_subnet_ID = ".".join(string_subnet_ID)
+    print("Subnet ID is: ", final_subnet_ID)
 
 
 subnet_calc()
