@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 web = webdriver.Chrome()
 web.get('http://web.whatsapp.com')
 web.implicitly_wait(20)
-elem = web.find_element_by_xpath('//span[contains(text(), "Prachiiiii")]')  # Replace "Prachiiiii" with your contact's name
+elem = web.find_element_by_xpath('//span[contains(text(), "TJ")]')  # Replace "TJ" with your contact's name
 web.maximize_window()
 elem.click()
 input = web.find_element_by_xpath('//*[@id="main"]/footer/div[1]/div[2]/div/div[2]')
